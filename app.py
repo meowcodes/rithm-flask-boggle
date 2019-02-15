@@ -5,6 +5,7 @@ from flask_debugtoolbar import DebugToolbarExtension
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "whatever!"
 
+debug = DebugToolbarExtension(app)
 boggle_game = Boggle()
 
 @app.route("/")
@@ -20,10 +21,14 @@ def view_board():
 
     return render_template('board.html', boggle_board=session["boggle_board"])
 
-# @app.route("/check-guess")
-# def check_guess():
-#     # get the guess
+@app.route("/check-guess", methods=["POST"])
+def check_guess():
+    # get the guess
+    guess = request.args.get('guess')
 
-#     # get the board from session
-#     # check if word valid in board
-#     # return result
+    # get the board from session
+    boggle_board = session["boggle_board"]
+    result = boggle_game.check_valid_word(boggle_board, guess)
+
+    # check if word valid in board
+    return result
