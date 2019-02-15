@@ -1,5 +1,14 @@
 let $guessForm = $("#guess-form");
 
+setTimeout(function(){
+    $guessForm.off()
+    $guessForm.on("submit", async function(evt) {
+        evt.preventDefault();
+        console.log("Out of time!")
+    })
+    console.log("Out of time!")
+}, 60000)
+
 $guessForm.on("submit", async function(evt) {
     evt.preventDefault();
 
