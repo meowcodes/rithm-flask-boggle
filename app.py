@@ -15,5 +15,14 @@ def view_board():
     # render_template(html, board=board)
     # another thing not here
 
-    session["boggle_board"] = boggle_game.make_board()
+    if not session["boggle_board"]:
+        session["boggle_board"] = boggle_game.make_board()
+
     return render_template('board.html', boggle_board=session["boggle_board"])
+
+@app.route("/", methods="POST")
+def check_guess():
+    # get the guess
+    # get the board from session
+    # check if word valid in board
+    # redirect to "/"
