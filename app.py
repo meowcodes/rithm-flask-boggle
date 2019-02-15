@@ -20,10 +20,10 @@ def view_board():
 
     return render_template('board.html', boggle_board=session["boggle_board"])
 
-# @app.route("/", methods="POST")
+# @app.route("/check-guess")
 # def check_guess():
 #     # get the guess
 
 #     # get the board from session
 #     # check if word valid in board
-#     # redirect to "/"
+#     # return result

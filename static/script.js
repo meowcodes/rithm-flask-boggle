@@ -7,7 +7,8 @@ $guessForm.on("submit", async function(evt) {
     let $guess = $("#guess")
 
     // sending guess, getting back result
-    let response = await $.post("/", {"guess":$guess})
+    let response = await $.get("/check-guess", 
+                            {"guess" : $guess})
 
     // displaying result in page
     $("#result-div").text(response.result)
