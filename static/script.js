@@ -1,45 +1,77 @@
-let $guessForm = $("#guess-form");
+let $guessForm = $("#guess-form")
 let $highScore = $("#high-score")
 let $gameCount = $("#game-count")
 
+class Game {
+    constructor(){
+        this.currScore = 0;
+        this.guessList = new Set();
+    }
 
+    async checkGuess(){
+        // getting guess
+        let $guess = $("#guess").val()
 
+        // checking if already counted
+        if(this.guessList.has($guess)){
+            return {"result":"repeated word"}
+        }
 
-setTimeout(async function(){
-    $guessForm.off()
-    $guessForm.on("submit", async function(evt) {
-        evt.preventDefault();
+        // adding to list of guessed words
+        this.guessList.add($guess)
+
+        // sending guess, getting back result
+        let response = await $.post("/check-guess", {"guess" : $guess})
+
+        return response;
+    }
+
+    displayResult(resultRes){
+        // update score if result is "ok"
+        if (resultRes.result === "ok"){
+            this.currScore += $guess.length
+            $("#score").text(this.currScore)
+        }
+
+        // display result message in page
+        $("#result-div").text(resultRes.result)
+    }
+
+    async endGame(){
+        // turn off listener
+        $guessForm.off()
+
+        // tell them they're out of time
         console.log("Out of time!")
-    })
-    console.log("Out of time!")
 
-    // get the score
-    finalScore = Number($('#score').text());
+        // turn on new listener to prevent refreshing
+        $guessForm.on("submit", async function(evt) {
+            evt.preventDefault();
+        })
 
-    // send server score and make it count a game
-    let response = await $.post("/stats", {"final_score":finalScore});
+        // get the final score
+        let finalScore = this.currScore;
 
-    // update high score and game count
-    $highScore.text(response.high_score);
-    $gameCount.text(response.game_count);
+        // send server final score
+        let response = await $.post("/stats", {"final_score":finalScore});
 
-}, 60000)
+        // update high score and game count in DOM
+        $highScore.text(response.high_score);
+        $gameCount.text(response.game_count);
+    }
+}
+
+currentGame = new Game();
 
 $guessForm.on("submit", async function(evt) {
     evt.preventDefault();
 
-    // getting guess
-    let $guess = $("#guess").val()
-
-    // sending guess, getting back result
-    let response = await $.post("/check-guess", {"guess" : $guess})
-
-    if (response.result === "ok"){
-        let curr_score = Number($('#score').text())
-        curr_score += $guess.length
-        $("#score").text(curr_score)
-    }
-    // displaying result in page
-    $("#result-div").text(response.result)
+    currentGame.displayResult(await currentGame.checkGuess());
 })
+
+
+setTimeout(async function(){
+    currentGame.endGame()
+}, 60000)
+
 
