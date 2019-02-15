@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table>
+    {% for row in boggle_board %}
+        <tr>
+            {% for cell in row %}
+                <td>{{ cell }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
