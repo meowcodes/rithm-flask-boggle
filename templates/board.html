@@ -10,8 +10,9 @@
         </tr>
     {% endfor %}
     </table>
-    <form action="/" method="POST">
-        <input name="guess">
+    <form id="guess-form" action="/" method="POST">
+        <input id="guess" name="guess">
         <button>Submit</button>
     </form>
+    <div id="result-div"></div>
 {% endblock %}
