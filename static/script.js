@@ -1,7 +1,6 @@
 let $guessForm = $("#guess-form");
 
 $guessForm.on("submit", async function(evt) {
-    console.log("here")
     evt.preventDefault();
 
     // getting guess
@@ -11,5 +10,5 @@ $guessForm.on("submit", async function(evt) {
     let response = await $.post("/check-guess", {"guess" : $guess})
 
     // displaying result in page
-    $("#result-div").text(response)
+    $("#result-div").text(response.result)
 })

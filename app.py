@@ -10,19 +10,22 @@ boggle_game = Boggle()
 
 @app.route("/")
 def view_board():
+    """ Shows board """
     # make the board 
     # save it to session 
     # send the board to session
     # render_template(html, board=board)
     # another thing not here
 
-    if not session["boggle_board"]:
-        session["boggle_board"] = boggle_game.make_board()
+    # if not session["boggle_board"]:
+    
+    session["boggle_board"] = boggle_game.make_board()
 
     return render_template('board.html', boggle_board=session["boggle_board"])
 
 @app.route("/check-guess", methods=["POST"])
 def check_guess():
+    """ Check guess and return result """
 
     # get the guess
     guess = request.form.get('guess')
@@ -31,6 +34,6 @@ def check_guess():
     boggle_board = session["boggle_board"]
 
     result = boggle_game.check_valid_word(boggle_board, guess)
-
+    
     # check if word valid in board
-    return result
+    return jsonify({"result":result})
