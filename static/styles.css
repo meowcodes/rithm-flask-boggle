@@ -1,0 +1,56 @@
+div {
+    /* border: solid 3px lightblue; */
+}
+
+body {
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.box {
+    min-height: 100vh;
+    max-width: 960px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+}
+
+.game-status {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(83, 19, 143);
+    color: white;
+}
+
+.game-status div {
+    margin: 0.5rem;
+}
+
+.timer-box {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background-color: rgb(83, 19, 143);
+    color: white;
+    padding: 0.5rem;
+}
+
+.status-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.table {
+    font-size: 1.75em;
+}
+
+.table table {
+    margin: 0 auto;
+}
+
