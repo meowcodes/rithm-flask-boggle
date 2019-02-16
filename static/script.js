@@ -3,6 +3,7 @@ class Game {
         this.currScore = 0;
         this.guessList = new Set();
         this.gameState = true;
+        this.timer = 60;
     }
 
     async checkGuess(){
@@ -52,6 +53,14 @@ class Game {
         // update high score and game count in DOM
         $("#high-score").text(response.high_score);
         $("#game-count").text(response.game_count);
+        clearInterval(this.refreshTimer);
+    }
+
+    startTimer(){
+        this.refreshTimer = setInterval(() => {
+            this.timer -= 1;
+            $("#timer").text(this.timer);
+        }, 1000)
     }
 }
 
@@ -67,4 +76,5 @@ setTimeout(async function(){
     currentGame.endGame()
 }, 60000)
 
+currentGame.startTimer()
 
