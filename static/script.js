@@ -1,14 +1,16 @@
-let $guessForm = $("#guess-form")
-let $highScore = $("#high-score")
-let $gameCount = $("#game-count")
-
 class Game {
     constructor(){
         this.currScore = 0;
         this.guessList = new Set();
+        this.gameState = true;
     }
 
     async checkGuess(){
+        // check if game still in progress
+        if(!this.gameState){
+            return {"result":"game over"}
+        }
+
         // getting guess
         let $guess = $("#guess").val()
 
@@ -29,7 +31,7 @@ class Game {
     displayResult(resultRes){
         // update score if result is "ok"
         if (resultRes.result === "ok"){
-            this.currScore += $guess.length
+            this.currScore += $("#guess").val().length
             $("#score").text(this.currScore)
         }
 
@@ -38,16 +40,8 @@ class Game {
     }
 
     async endGame(){
-        // turn off listener
-        $guessForm.off()
-
-        // tell them they're out of time
-        console.log("Out of time!")
-
-        // turn on new listener to prevent refreshing
-        $guessForm.on("submit", async function(evt) {
-            evt.preventDefault();
-        })
+        // update game state
+        this.gameState = false;
 
         // get the final score
         let finalScore = this.currScore;
@@ -56,19 +50,18 @@ class Game {
         let response = await $.post("/stats", {"final_score":finalScore});
 
         // update high score and game count in DOM
-        $highScore.text(response.high_score);
-        $gameCount.text(response.game_count);
+        $("#high-score").text(response.high_score);
+        $("#game-count").text(response.game_count);
     }
 }
 
-currentGame = new Game();
+const currentGame = new Game();
 
-$guessForm.on("submit", async function(evt) {
+$("#guess-form").on("submit", async function(evt) {
     evt.preventDefault();
 
     currentGame.displayResult(await currentGame.checkGuess());
 })
-
 
 setTimeout(async function(){
     currentGame.endGame()
